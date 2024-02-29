@@ -1,16 +1,16 @@
 import pyttsx3
 import PyPDF2
-from tkinter.filedialog import askopenfilename
+from tkinter import filedialog
 
-selected_file = askopenfilename()
+book_path = filedialog.askopenfilename()
 
-pdf_reader = PyPDF2.PdfFileReader(selected_file)
+with open(book_path, 'rb') as file:
+    pdf_reader = PyPDF2.PdfReader(file)
+    num_pages = len(pdf_reader.pages)
 
-num_pages = pdf_reader.numPages
-
-for page_num in range(0, num_pages):
-    page = pdf_reader.getPage(page_num)
-    text = page.extractText()
-    speaker = pyttsx3.init()
-    speaker.say(text)
-    speaker.runAndWait()
+    for page_num in range(num_pages):
+        page = pdf_reader.pages[page_num]
+        text = page.extract_text()
+        speaker = pyttsx3.init()
+        speaker.say(text)
+        speaker.runAndWait()
